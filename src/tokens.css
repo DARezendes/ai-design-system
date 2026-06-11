@@ -1,0 +1,11 @@
+:root {
+  --brand-primary: oklch(0.488 0.243 264.376);
+  --brand-primary-foreground: oklch(0.985 0 0);
+  --brand-accent: oklch(0.75 0.18 160);
+  --brand-accent-foreground: oklch(0.145 0 0);
+  --brand-warning: oklch(0.82 0.18 85);
+  --brand-warning-foreground: oklch(0.145 0 0);
+
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--brand-primary-foreground);
+}
