@@ -30,12 +30,24 @@ The Figma file defines the brand token layer with a `Brand Tokens` variable coll
 
 ```bash
 npm install
-npm run dev        # component library
-npm run storybook  # component docs
-node server.js     # AI scaffolding server
+npm install -g vercel
+vercel login
+vercel link
+vercel env pull .env.local  # pulls API key from Vercel
+vercel dev                  # runs frontend + AI API together
 ```
 
-Requires `ANTHROPIC_API_KEY` in `.env`.
+Or without Vercel CLI, create a `.env` file manually:
+
+ANTHROPIC_API_KEY=your_key_here
+
+Then run `node server.js` in one tab and `npm run dev` in another.
+
+```bash
+npm run storybook  # component docs (separate tab, port 6006)
+```
+
+Requires `ANTHROPIC_API_KEY` in `.env` or pull from Vercel with `vercel env pull`.
 
 ---
 

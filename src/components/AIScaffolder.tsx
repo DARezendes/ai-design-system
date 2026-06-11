@@ -22,17 +22,21 @@ export function AIScaffolder() {
           messages: [
             {
               role: 'user',
-              content: `You are a design system engineer. Generate a React TypeScript component using shadcn/ui, Radix UI, Tailwind CSS, and CSS custom property tokens.
+              content: `You are a design system engineer. Generate a single self-contained HTML snippet (no React, no imports) that visually demonstrates a UI component using these CSS custom properties as inline styles or a style tag:
 
-The component should follow this token system:
-- Colors: --primary, --secondary, --destructive, --brand-accent, --brand-warning
-- All values are CSS custom properties
-- Use Tailwind utility classes where possible
-- Use class-variance-authority for variants if applicable
+--primary: #3B5BDB
+--destructive: #E03131  
+--accent: #12B886
+--warning: #F59F00
 
 Request: ${prompt}
 
-Return ONLY the component code, no explanation, no markdown fences.`,
+Rules:
+- Return ONLY a valid HTML snippet, no explanation, no markdown fences
+- Use inline styles or a <style> tag
+- Make it look polished and professional
+- Use the brand colors above
+- No external dependencies`,
             },
           ],
         }),
@@ -48,6 +52,15 @@ Return ONLY the component code, no explanation, no markdown fences.`,
       setLoading(false)
     }
   }
+
+  const previewSrc = output
+    ? URL.createObjectURL(
+        new Blob(
+          [`<html><body style="margin:0;padding:24px;font-family:system-ui,sans-serif;background:#0a0a0f;color:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh;box-sizing:border-box;">${output}</body></html>`],
+          { type: 'text/html' }
+        )
+      )
+    : ''
 
   return (
     <section className="space-y-4">
@@ -85,20 +98,38 @@ Return ONLY the component code, no explanation, no markdown fences.`,
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="relative"
+              className="grid grid-cols-2 gap-4"
             >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-muted-foreground">Generated Component</span>
-                <button
-                  onClick={() => navigator.clipboard.writeText(output)}
-                  className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-                >
-                  Copy
-                </button>
+              {/* Code */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-muted-foreground">Generated Code</span>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(output)}
+                    className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre className="rounded-lg bg-muted border border-border p-4 text-xs overflow-x-auto whitespace-pre-wrap text-foreground font-mono leading-relaxed h-64">
+                  {output}
+                </pre>
               </div>
-              <pre className="rounded-lg bg-muted border border-border p-4 text-xs overflow-x-auto whitespace-pre-wrap text-foreground font-mono leading-relaxed">
-                {output}
-              </pre>
+
+            {/* Preview */}
+                <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-muted-foreground">Live Preview</span>
+                </div>
+                <div className="rounded-lg border border-border overflow-hidden h-64">
+                    <iframe
+                    src={previewSrc}
+                    className="w-full h-full"
+                    title="Component Preview"
+                    sandbox="allow-scripts"
+                    />
+                </div>
+            </div>
             </motion.div>
           )}
         </AnimatePresence>
