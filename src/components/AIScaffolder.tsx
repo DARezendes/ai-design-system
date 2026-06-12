@@ -170,7 +170,7 @@ Rules:
   const previewSrc = output
     ? URL.createObjectURL(
         new Blob(
-        [`<html><body style="margin:0;padding:0;font-family:system-ui,sans-serif;background:#0a0a0f;color:#f5f5f5;box-sizing:border-box;">${output}</body></html>`],
+        [`<html><body style="margin:0;padding:0;font-family:system-ui,sans-serif;background:#ffffff;color:#f5f5f5;box-sizing:border-box;">${output}</body></html>`],
           { type: 'text/html' }
         )
       )
