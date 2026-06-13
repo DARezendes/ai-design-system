@@ -181,7 +181,7 @@ Rules:
       <div>
         <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">AI Component Scaffolder</h2>
         <p className="text-sm text-muted-foreground mt-2">
-          Describe a component and generate production-ready code using your token system.
+          Describe a component and generate scaffolded code, documentation, and a Code Connect file using the Forge token system.
         </p>
       </div>
 
