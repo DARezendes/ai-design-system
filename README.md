@@ -12,9 +12,30 @@ Brand tokens (`--brand-primary`, `--brand-accent`, `--brand-warning`) override s
 
 ## AI Scaffolding Pipeline
 
-Describe a component in plain language → Claude generates a production-ready TypeScript component using the Forge token system, shadcn/ui, Radix UI, CVA, and Tailwind. No boilerplate, no manual scaffolding.
+Describe a component in plain language → the pipeline generates three outputs in parallel:
 
-**Example:** `a warning badge with label and icon` → fully typed `WarningBadge` with CVA variants, Lucide icons, and `--brand-warning` token.
+1. **Component code** — production-ready HTML using the Forge token system
+2. **Documentation** — auto-generated props table, usage guidelines, and accessibility notes
+3. **Code Connect stub** — a `.figma.ts` file ready to drop into the repo, linking the component to its Figma node
+
+**Example:** `a warning badge with label and icon` → scaffolded component, docs, and a downloadable `warning-badge-with-label-and-icon.figma.ts`
+
+## Token Sync
+
+Tokens can be synced directly from Figma Variables to `src/tokens.css` using the sync script:
+
+```bash
+npm run sync-tokens
+```
+
+Requires a Figma Enterprise plan and a personal access token with `file_content:read` scope. Add to `.env`:
+
+```
+FIGMA_TOKEN=your_token_here
+FIGMA_FILE_ID=Wlb0SV32WtyJf6wfHDen1H
+```
+
+This closes the Figma → code token loop: designer updates a variable in Figma, run the sync, every token-wired component updates automatically.
 
 ## Stack
 
@@ -24,7 +45,7 @@ React 18 · TypeScript · Vite · Radix UI · shadcn/ui · Tailwind CSS v4 · Fr
 
 [View Forge Design System in Figma](https://www.figma.com/design/Wlb0SV32WtyJf6wfHDen1H/Forge-Design-System?node-id=0-1&t=SAcMRlJ8mqtVtDTY-1)
 
-The Figma file defines the brand token layer with a `Brand Tokens` variable collection that maps 1:1 to the CSS custom properties in `tokens.css`. Components are built using those variables — the same token names appear in both Figma and code.
+The Figma file defines three variable collections: `Primitives` (raw brand values), `Tokens` (semantic aliases with Light/Dark modes), and `Radius`. Components are built using `Tokens` variables — the same token names appear in both Figma and code. The Button component uses variant and disabled component properties wired to the token system.
 
 ## Running Locally
 
@@ -39,7 +60,9 @@ vercel dev                  # runs frontend + AI API together
 
 Or without Vercel CLI, create a `.env` file manually:
 
+```
 ANTHROPIC_API_KEY=your_key_here
+```
 
 Then run `node server.js` in one tab and `npm run dev` in another.
 
